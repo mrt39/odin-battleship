@@ -91,6 +91,11 @@ const Gameboard = function () {
 // TODO: MAKE SURE THAT IF THE SPOT HAS ALREADY BEEN HIT OR MISS, DO NOTHING 
     //registers players attack on a gameboard tile
     gameboard.receiveAttack = function (xAxis, yAxis ){
+
+        //if the tile already has a "hit" or "miss" string on it, that's not a legal move, so do nothing
+        if (gameboard.x_axis[xAxis][yAxis] === "hit" || gameboard.x_axis[xAxis][yAxis] === "miss"){
+            return
+        }
         //if the received attack from the coordinates hits a ship, activate hit function on the ship
         //also remove the ship object from the tile and fill it with "hit" string
         if(gameboard.x_axis[xAxis][yAxis] != "blanks"){
@@ -116,6 +121,5 @@ const Gameboard = function () {
 
 //export the Gameboard factory function to test environment
 module.exports = {Gameboard, Ship};
-
 
 
