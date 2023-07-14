@@ -88,7 +88,6 @@ const Gameboard = function () {
 
     };
 
-// TODO: MAKE SURE THAT IF THE SPOT HAS ALREADY BEEN HIT OR MISS, DO NOTHING 
     //registers players attack on a gameboard tile
     gameboard.receiveAttack = function (xAxis, yAxis ){
 
@@ -119,7 +118,29 @@ const Gameboard = function () {
     return gameboard;
 };
 
-//export the Gameboard factory function to test environment
-module.exports = {Gameboard, Ship};
+
+// Factory Function for creating players for the game
+const Player = function (playername) {
+
+    // create ship object
+    var player = {};
+
+    // parameters as keys to this object  
+    player.name = playername;
+
+    // function for the player move
+    player.attack = function(gameboard, xAxis, yAxis) {
+        
+        gameboard.receiveAttack(xAxis, yAxis) 
+        
+    };
+
+    return player;
+
+};
+
+//export the Ship and Gameboard factory functions to test environment
+module.exports = {Gameboard, Ship, Player};
+
 
 
