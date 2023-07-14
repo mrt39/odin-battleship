@@ -1,4 +1,4 @@
-let allFunctions = require('./app');
+let allFunctions = require('./factories');
 const Ship = allFunctions.Ship;
 const Gameboard = allFunctions.Gameboard;
 const Player = allFunctions.Player;

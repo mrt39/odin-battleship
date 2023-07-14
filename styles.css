@@ -1,0 +1,54 @@
+/*TODO: 
+ADD HOVER CSS ON BUTTONS. 
+change background of rainbow button when rainbow = true
+change the font of the header
+     */
+
+* {
+  margin: 0;
+  padding: 0;
+  box-sizing: border-box;
+  font-family: roboto, serif;
+  background-color:antiquewhite
+}
+
+#headerContainer {
+  display: flex;
+  justify-content: center;
+  
+}
+
+#paletteContainer {
+  display: flex;
+  justify-content: space-evenly;
+  align-items: center;
+
+}
+
+#wholePalette {
+
+  display: flex;
+  align-items: stretch;
+  width: 600px;
+  height: 600px;  
+  margin-right: 52px;
+  
+  
+}
+
+#changeSize {
+  display: flex;
+  justify-content: center;
+  
+}
+
+#btnChangeSize{
+  padding: 10px;
+  font-size: large;
+}
+
+#btnRainbow{
+  padding: 10px;
+  font-size: large;
+  
+}
