@@ -1,7 +1,4 @@
-let allFunctions = require('./factories');
-const Ship = allFunctions.Ship;
-const Gameboard = allFunctions.Gameboard;
-const Player = allFunctions.Player;
+import {Gameboard, Ship, Player} from './factories.js';
 
 test('check if the hit number increases', () => {
   var ship1 = Ship('warship', 3);

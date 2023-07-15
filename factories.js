@@ -139,7 +139,5 @@ const Player = function (playername) {
 
 };
 
-//export the Ship and Gameboard factory functions to test environment
-module.exports = {Gameboard, Ship, Player};
 
-
+export {Gameboard, Ship, Player};
