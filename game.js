@@ -31,8 +31,14 @@ console.log(gameboardComputer.submarine)
 let shipsize = 5
 let alignment = "xd"
 
+const palette = document.querySelector(('#placementBoard'))
+
 
 function placementBoard () {
+
+    let board = document.createElement('div');
+    board.setAttribute('style', 'display: flex; align-items: stretch; width: 600px; height: 600px; ');
+
     for (let i = 0; i < 10; i++) {
 
         const i_Divs = []; 
@@ -46,11 +52,6 @@ function placementBoard () {
         //set style 
         
         i_Divs[i].setAttribute('style', 'display: flex; flex-direction: column; align-content: stretch; width: 100%; ');    
-    
-        const palette = document.querySelector(('#wholePalette'))
-
-        palette.appendChild(i_Divs[i])
-
 
         for (let k = 0; k < 10; k++) {
 
@@ -192,13 +193,13 @@ function placementBoard () {
             i_Divs[i].appendChild(k_Divs[k]); 
 
         }    
-    }  
+        board.appendChild(i_Divs[i])
+    } 
+
+    return board
 
 }
 
 
-placementBoard ()
-
-
-
-
+let finalplacementBoard = placementBoard()
+palette.appendChild(finalplacementBoard)
