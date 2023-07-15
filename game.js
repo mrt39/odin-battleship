@@ -99,7 +99,7 @@ function placementBoard () {
                 //how many tiles change is based on the ship size
                 k_Divs[k].addEventListener('mouseover', () => {
 
-                    //we don't want mouseout to white the tiles that are gray (have a ship placed)
+                    //we don't want mouseover to green the tiles that are gray (have a ship placed)
                     if (k_Divs[k].style.backgroundColor === "slategray"){
                         return
                     }
@@ -119,12 +119,14 @@ function placementBoard () {
                         //if it is exceeding the board size, turn it backwards 
                         if (parseInt(k_Divs[k].id.at(-1))+shipsize > 9){
                             let z = document.querySelector("#div_no_"+(parseInt(idNo)-j))
+                            //if there is a ship in any of the occupied tiles, do nothing
                             if (z.style.backgroundColor === "slategray"){
                                 return
                             }
                             z.style.backgroundColor = "lightgreen";
                         } else{
                             let z = document.querySelector("#div_no_"+(parseInt(idNo)+j))
+                            //if there is a ship in any of the occupied tiles, do nothing
                             if (z.style.backgroundColor === "slategray"){
                                 return
                             }
@@ -152,12 +154,14 @@ function placementBoard () {
                         //if it is exceeding the board size, turn it backwards 
                         if (parseInt(k_Divs[k].id.at(-1))+shipsize > 9){
                             let z = document.querySelector("#div_no_"+(parseInt(idNo)-j))
+                            //if there is a ship in any of the occupied tiles, do nothing
                             if (z.style.backgroundColor === "slategray"){
                                 return
                             }
                             z.style.backgroundColor = "white";
                         } else{
                             let z = document.querySelector("#div_no_"+(parseInt(idNo)+j))
+                            //if there is a ship in any of the occupied tiles, do nothing
                             if (z.style.backgroundColor === "slategray"){
                                 return
                             }
@@ -166,16 +170,34 @@ function placementBoard () {
                 }
                 });
 
-                //mouseout listener for cleaning the tiles once hovering is over
+                //click listener for adding a ship and turning color to gray
                 k_Divs[k].addEventListener('click', () => {
-                    for (let j = 0; j < shipsize; j++) {
-                        k_Divs[k].style.backgroundColor = "slategray";
-                        //get the last 2 characters of the id of the hovered tile
-                        //id is something like div_no_24 so we are getting the number at the end
+
+                    //check if the there is already a ship in the hovered tiles, if there is, do nothing
+                    for (let x = 0; x < shipsize; x++) {
+
                         let idNo = k_Divs[k].id.slice(7)
 
-                        //we get the last digit of the id of the hovered tile and ship size to it
-                        //if it is exceeding the board size, turn it backwards 
+                        if (parseInt(k_Divs[k].id.at(-1))+shipsize > 9){
+                            let z = document.querySelector("#div_no_"+(parseInt(idNo)-x))
+                            //if there is a ship in any of the occupied tiles, do nothing
+                            if (z.style.backgroundColor === "slategray"){
+                                return
+                            }
+                        } else{
+                            let z = document.querySelector("#div_no_"+(parseInt(idNo)+x))
+                            //if there is a ship in any of the occupied tiles, do nothing
+                            if (z.style.backgroundColor === "slategray"){
+                                return
+                            }
+                        }
+
+                    }
+                    //if the tiles are not occupied, turn them into gray and add a ship
+                    for (let j = 0; j < shipsize; j++) {
+
+                        let idNo = k_Divs[k].id.slice(7)
+
                         if (parseInt(k_Divs[k].id.at(-1))+shipsize > 9){
                             let z = document.querySelector("#div_no_"+(parseInt(idNo)-j))
                             z.style.backgroundColor = "slategray";
@@ -185,7 +207,6 @@ function placementBoard () {
                         }
                 }
                 });
-
 
             }
             
