@@ -32,8 +32,11 @@ console.log(gameboardComputer.submarine) */
 var shipsize = 5
 var alignment = "horizontal"
 let numberofShipsAdded = 0
+var gameStarted = false
+var playersturn = true
 
 const palette = document.querySelector(('#placementBoard'))
+const paletteContainer = document.querySelector(('#paletteContainer'))
 
 //Vertical - horizontal button
 const alignmentBtn = document.querySelector('#alignmentBtn');
@@ -89,6 +92,11 @@ function placementBoard () {
                 //for each box we add a 'hover' listener
                 //how many tiles change is based on the ship size
                 k_Divs[k].addEventListener('mouseover', () => {
+
+                    //if the game has started, do nothing
+                    if (gameStarted === true){
+                        return
+                    }
 
                     //if the alignment is vertical, this is how we paint the boxes on hover
                     if (alignment === "vertical"){ 
@@ -149,6 +157,11 @@ function placementBoard () {
 
                 //mouseout listener for cleaning the tiles once hovering is over
                 k_Divs[k].addEventListener('mouseout', () => {
+                    //if the game has started, do nothing
+                    if (gameStarted === true){
+                        return
+                    }
+
                     if (alignment === "vertical"){                    
                         for (let j = 0; j < shipsize; j++) {
                         //if it is exceeding the board size, turn it backwards 
@@ -201,7 +214,10 @@ function placementBoard () {
                 //click listener for adding a ship and turning color to gray
                 k_Divs[k].addEventListener('click', () => {
 
-
+                    //if the game has started, do nothing
+                    if (gameStarted === true){
+                        return
+                    }
                     //if the alignment is vertical, this is how the click function works
                     if (alignment === "vertical"){
                         //check if the there is already a ship in the hovered tiles, if there is, do nothing
@@ -285,8 +301,11 @@ function placementBoard () {
 
 }
 
+let finalplacementBoard = placementBoard()
+palette.appendChild(finalplacementBoard)
 
-//function for adding ships to the placement board
+
+//function for adding ships to the placement board by user click
 function addShip (alignment, placement_id) {
 
     //placement_id is a string like div_no_36. eliminate the first 7 chars to get the number
@@ -295,13 +314,6 @@ function addShip (alignment, placement_id) {
     if (id_num.length === 1){
         id_num = "0"+id_num
     }
-
-
-/*     console.log(id_num[0])
-    console.log(id_num[1]) */
-    //gameboardUser.position(Ship("carrier", 5), alignment, id_num[0], id_num[1])    
-    //console.log(gameboardUser.x_axis)
-    
 
     //add a carrier (size:5)
     if (numberofShipsAdded ===0){
@@ -329,15 +341,215 @@ function addShip (alignment, placement_id) {
     } else if (numberofShipsAdded ===4){
         gameboardUser.position(Ship("boat", 2), alignment, parseInt(id_num[0]), parseInt(id_num[1]))
         
-        //start the game
+        startGame()
     } 
     
     console.log(gameboardUser.x_axis)
+    
+}
 
+//function for producing a random integer
+function getRandomInt(max) {
+    return Math.floor(Math.random() * max);
+}
+
+//function for placing  ships randomly inside the "gameboardComputer" object
+function addComputerShips() {
+
+    let alignmentComp = "horizontal"
+
+    //carrier placement
+    while (gameboardComputer.placedcarrier === false){
+        //getrandomint returns 0, alignment is horizontal
+        if (getRandomInt(2) === 0){
+            alignmentComp = "horizontal"
+        }
+        else { //getrandomint returns 1, alignment is vertical
+            alignmentComp = "vertical"
+        }
+        gameboardComputer.position(Ship("carrier", 5), alignmentComp, getRandomInt(10), getRandomInt(10))
+
+        //if the computer manages to place the carrier legally, break the while loop
+        if (gameboardComputer.placedcarrier === true){
+            break
+        }
+    }
+
+     //battleship placement
+    while (gameboardComputer.placedbattleship === false){
+        //getrandomint returns 0, alignment is horizontal
+        if (getRandomInt(2) === 0){
+            alignmentComp = "horizontal"
+        }
+        else { //getrandomint returns 1, alignment is vertical
+            alignmentComp = "vertical"
+        }
+        gameboardComputer.position(Ship("battleship", 4), alignmentComp, getRandomInt(10), getRandomInt(10))
+
+        //if the computer manages to place the battleship legally, break the while loop
+        if (gameboardComputer.placedbattleship === true){
+            break
+        }
+    }
+    
+
+    //destroyer placement
+    while (gameboardComputer.placeddestroyer === false){
+        //getrandomint returns 0, alignment is horizontal
+        if (getRandomInt(2) === 0){
+            alignmentComp = "horizontal"
+        }
+        else { //getrandomint returns 1, alignment is vertical
+            alignmentComp = "vertical"
+        }
+        gameboardComputer.position(Ship("destroyer", 3), alignmentComp, getRandomInt(10), getRandomInt(10))
+
+        //if the computer manages to place the destroyer legally, break the while loop
+        if (gameboardComputer.placeddestroyer === true){
+            break
+        }
+    }
+    
+
+    //submarine placement
+    while (gameboardComputer.placedsubmarine === false){
+        //getrandomint returns 0, alignment is horizontal
+        if (getRandomInt(2) === 0){
+            alignmentComp = "horizontal"
+        }
+        else { //getrandomint returns 1, alignment is vertical
+            alignmentComp = "vertical"
+        }
+        gameboardComputer.position(Ship("submarine", 3), alignmentComp, getRandomInt(10), getRandomInt(10))
+
+        //if the computer manages to place the submarine legally, break the while loop
+        if (gameboardComputer.placedsubmarine === true){
+            break
+        }
+    }
+    
+
+    //boat placement
+    while (gameboardComputer.placedboat === false){
+        //getrandomint returns 0, alignment is horizontal
+        if (getRandomInt(2) === 0){
+            alignmentComp = "horizontal"
+        }
+        else { //getrandomint returns 1, alignment is vertical
+            alignmentComp = "vertical"
+        }
+        gameboardComputer.position(Ship("boat", 2), alignmentComp, getRandomInt(10), getRandomInt(10))
+
+        //if the computer manages to place the boat legally, break the while loop
+        if (gameboardComputer.placedboat === true){
+            break
+        }
+
+    } 
+    
+
+    console.log(gameboardComputer.x_axis)
+
+}   
+
+function computerBoardCreation(){
+
+    //placing the ships randomly inside the "gameboardComputer" object
+    addComputerShips()
+
+    console.log(gameboardComputer.x_axis)
+
+    //board creation
+    let board = document.createElement('div');
+    board.setAttribute('style', 'display: flex; align-items: stretch; width: 600px; height: 600px; ');
+
+    for (let i = 0; i < 10; i++) {
+
+        const i_Divs = []; 
+        const k_Divs = [];
+
+        i_Divs[i] = document.createElement('div');
+        //set the id of the div to the number of the div
+        i_Divs[i].setAttribute('id', `column_no_${i}`); 
+
+
+        //set style 
+        
+        i_Divs[i].setAttribute('style', 'display: flex; flex-direction: column; align-content: stretch; width: 100%; ');    
+
+        for (let k = 0; k < 10; k++) {
+
+            k_Divs[k] = document.createElement('div');
+            //set the id of the div to the number of the div
+            k_Divs[k].setAttribute('id', `div_no_${k*10+i}`); 
+
+            //create borders
+            k_Divs[k].setAttribute('style', 'border: 1px solid black; height: 100% ; background-color: white'); 
+
+            //set an attribute that will help us identify these divs when we select them
+            k_Divs[k].setAttribute('data-src', ''); 
+
+
+                //for each box we add a 'hover' listener
+                //how many tiles change is based on the ship size
+                k_Divs[k].addEventListener('mouseover', () => {
+                    k_Divs[k].style.backgroundColor = "blue"
+                })
+                //mouseout listener for cleaning the tiles once hovering is over
+                k_Divs[k].addEventListener('mouseout', () => {
+                    k_Divs[k].style.backgroundColor = "white"
+                });
+                //click listener for adding a ship and turning color to gray
+                k_Divs[k].addEventListener('click', () => {
+                    //if hit, add a X inside
+                    //if miss, blue 
+                    
+                    //player made a turn by clicking so turn the variable in to false
+                    playersturn = false
+
+
+                })
+                i_Divs[i].appendChild(k_Divs[k]); 
+            }    
+            board.appendChild(i_Divs[i])
+        } 
+        return board
+     
+        
 }
 
 
-let finalplacementBoard = placementBoard()
-palette.appendChild(finalplacementBoard)
 
 
+
+function startGame(){
+
+    gameStarted = true
+
+    //position the current board to the left, create another board of the similar kind to the right
+    let computerBoard = document.createElement('div');
+    let computerplacementBoard = computerBoardCreation()
+    computerBoard.appendChild(computerplacementBoard)
+    paletteContainer.appendChild(computerBoard)
+
+
+}
+
+//function to wait until player makes a turn
+function playersTurn(){
+    //hold on until player makes a turn
+    while (playersturn === true){
+
+    }
+}
+
+
+//function for computer's turn
+function computersTurn(){
+
+    //TODO: computer makes a move
+
+    //it's players turn to make a move
+    playersturn = true
+    playersTurn()
+}

@@ -60,6 +60,13 @@ const Gameboard = function () {
     gameboard.submarine = Ship("submarine", 3);
     gameboard.boat = Ship("boat", 2);
 
+    //whether this board has these ships or not
+    gameboard.placedcarrier = false
+    gameboard.placedbattleship = false
+    gameboard.placeddestroyer = false
+    gameboard.placedsubmarine = false
+    gameboard.placedboat = false
+
     //gameover condition
     gameboard.gameover = false //will turn true if all ships sink
 
@@ -67,25 +74,83 @@ const Gameboard = function () {
     //fill the respectable spots on the board with "filled" string
     gameboard.position = function (ship, alignment, startingPositionXaxis, startingPositionYaxis ) {
 
-        //fill the spots on the board depending on the ship size
-        for (let i = 0; i < ship.size; i++) {
+        //variable for checking if the chosen areas are already occupied with a ship or are if they're clean
+        var clean = true
+        
             if (alignment === "vertical"){ //alignment can also be horizontal
                 //if ship size exceeds the board size, place it backwards
                 if (startingPositionXaxis + ship.size>9){
-                    gameboard.x_axis[startingPositionXaxis-i][startingPositionYaxis] = ship                
-                }else{ //else, fill the spots on the board with the ship object
-                    gameboard.x_axis[startingPositionXaxis+i][startingPositionYaxis] = ship
+                    //if any of the tiles are occupied with a ship already, do nothing 
+                    //if ship size exceeds the board size, we are looking to place it backwards
+                    for (let i = 0; i < ship.size; i++) {
+                        if (typeof gameboard.x_axis[startingPositionXaxis-i][startingPositionYaxis] === "object") {
+                            //if they're already occupied with an "object", means there's a ship there, so turning clean to false
+                            clean = false
+                            return
+                        }
+                    }
+                    //only placing a ship in these tiles because these tiles are clean (don't already have ships on them)
+                    if (clean ===true){
+                        for (let i = 0; i < ship.size; i++) {
+                            gameboard.x_axis[startingPositionXaxis-i][startingPositionYaxis] = ship 
+                        } 
+                    } 
+
+                }else{ 
+                    //if any of the tiles are occupied with a ship already, do nothing 
+                    for (let i = 0; i < ship.size; i++) {
+                        if (typeof gameboard.x_axis[startingPositionXaxis+i][startingPositionYaxis] === "object") {
+                            clean = false
+                            return
+                        }
+                    }
+                    if (clean ===true){
+                        for (let i = 0; i < ship.size; i++) {
+                            gameboard.x_axis[startingPositionXaxis+i][startingPositionYaxis] = ship
+                    }   }
                 }
             }else{
-                //if ship size exceeds the board size, place it backwards
+                //if ship size exceeds the board size, we are looking to place it backwards
                 if (startingPositionYaxis+ship.size>9){
-                    gameboard.x_axis[startingPositionXaxis][startingPositionYaxis-i] = ship
-                }else{ //else, fill the spots on the board with the ship object
-                    gameboard.x_axis[startingPositionXaxis][startingPositionYaxis+i] = ship    
+                    //if any of the tiles are occupied with a ship already, do nothing 
+                    for (let i = 0; i < ship.size; i++) {
+                        if (typeof gameboard.x_axis[startingPositionXaxis][startingPositionYaxis-i] === "object") {
+                            clean = false
+                            return
+                        }
+                    }
+                    if (clean ===true){
+                        for (let i = 0; i < ship.size; i++) {
+                            gameboard.x_axis[startingPositionXaxis][startingPositionYaxis-i] = ship
+                        }
+                    }
+                }else{ 
+                    //if any of the tiles are occupied with a ship already, do nothing 
+                    for (let i = 0; i < ship.size; i++) {
+                        if (typeof gameboard.x_axis[startingPositionXaxis][startingPositionYaxis+i] === "object") {
+                            clean = false
+                            return
+                        }
+                    }
+                    if (clean ===true){
+                        for (let i = 0; i < ship.size; i++) {
+                            gameboard.x_axis[startingPositionXaxis][startingPositionYaxis+i] = ship   
+                        }
+                    } 
                 }
             }
+        
+        if (ship.name === "carrier") {
+            gameboard.placedcarrier = true
+        } else if (ship.name === "battleship") {
+            gameboard.placedbattleship = true
+        } else if (ship.name === "destroyer") {
+            gameboard.placeddestroyer = true
+        } else if (ship.name === "submarine") {
+            gameboard.placedsubmarine = true
+        } else if (ship.name === "boat") {
+            gameboard.placedboat = true
         }
-
     };
 
     //registers players attack on a gameboard tile
