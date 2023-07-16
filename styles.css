@@ -25,14 +25,14 @@
   align-items: stretch;
   width: 600px;
   height: 600px;  
-  margin-right: 52px;
-  
+
   
 }
 
-#changeSize {
+#middle {
   display: flex;
   justify-content: center;
+  font-size: 45px;
   
 }
 

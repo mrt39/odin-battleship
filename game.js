@@ -4,23 +4,6 @@ import {Gameboard, Ship, Player} from './factories.js';
 //creating objects for the game
 const gameboardComputer = Gameboard()
 const gameboardUser = Gameboard()
-const playerUser = Player("user")
-const playerComputer = Player("computer")
-
-//TEST FUNCTIONS
-//gameboardComputer.position(Ship("submarine", 3), "horizontal", 8, 9)
-
-
-/* playerUser.attack(gameboardComputer, 2, 3)
-
-console.log(gameboardComputer.x_axis[2][3])
-console.log(gameboardComputer.submarine) 
-
-playerUser.attack(gameboardComputer, 3, 3)
-
-console.log(gameboardComputer.x_axis[3][3])
-console.log(gameboardComputer.submarine) */  
-
  
 
 //DOM manipulation
@@ -562,6 +545,11 @@ function computerBoardCreation(){
                     gameboardComputer.gameOver()
                     if (gameboardComputer.gameover ===true){
                         gameOver = true
+                        //add a "player wins" text
+                        let text = document.createElement('div');
+                        text.innerText = "Player Wins!"
+                        let container = document.querySelector("#middle")
+                        container.appendChild(text)
                     }
 
                     //computer's turn
@@ -575,16 +563,15 @@ function computerBoardCreation(){
         } 
         return board
      
-        
 }
-
-
-
 
 
 function startGame(){
 
     gameStarted = true
+    //remove the alignment button
+    let btn = document.querySelector("#alignmentBtn")
+    btn.remove()
 
     //position the current board to the left, create another board of the similar kind to the right
     let computerBoard = document.createElement('div');
@@ -634,6 +621,11 @@ function computersTurn(){
     gameboardUser.gameOver()
     if (gameboardUser.gameover ===true){
         gameOver = true
+        //add a computer wins text
+        let text = document.createElement('div');
+        text.innerText = "Computer Wins!"
+        let container = document.querySelector("#middle")
+        container.appendChild(text)
     }
 
 }
