@@ -69,17 +69,17 @@ const Gameboard = function () {
 
         //fill the spots on the board depending on the ship size
         for (let i = 0; i < ship.size; i++) {
-            if (alignment === "horizontal"){ //alignment can also be vertical
-                //if ship size exceeds the board size, do nothing 
-                if (startingPositionXaxis+ship.size>9){
-                    return                
+            if (alignment === "vertical"){ //alignment can also be horizontal
+                //if ship size exceeds the board size, place it backwards
+                if (startingPositionXaxis + ship.size>9){
+                    gameboard.x_axis[startingPositionXaxis-i][startingPositionYaxis] = ship                
                 }else{ //else, fill the spots on the board with the ship object
                     gameboard.x_axis[startingPositionXaxis+i][startingPositionYaxis] = ship
                 }
             }else{
-                //if ship size exceeds the board size, do nothing 
+                //if ship size exceeds the board size, place it backwards
                 if (startingPositionYaxis+ship.size>9){
-                    return 
+                    gameboard.x_axis[startingPositionXaxis][startingPositionYaxis-i] = ship
                 }else{ //else, fill the spots on the board with the ship object
                     gameboard.x_axis[startingPositionXaxis][startingPositionYaxis+i] = ship    
                 }

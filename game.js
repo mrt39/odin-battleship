@@ -8,10 +8,12 @@ const playerUser = Player("user")
 const playerComputer = Player("computer")
 
 //TEST FUNCTIONS
-/* gameboardComputer.position(Ship("submarine", 3), "horizontal", 2, 3)
+//gameboardComputer.position(Ship("submarine", 3), "horizontal", 8, 9)
 
 
-playerUser.attack(gameboardComputer, 2, 3)
+
+
+/* playerUser.attack(gameboardComputer, 2, 3)
 
 console.log(gameboardComputer.x_axis[2][3])
 console.log(gameboardComputer.submarine) 
@@ -19,7 +21,7 @@ console.log(gameboardComputer.submarine)
 playerUser.attack(gameboardComputer, 3, 3)
 
 console.log(gameboardComputer.x_axis[3][3])
-console.log(gameboardComputer.submarine)  */
+console.log(gameboardComputer.submarine) */  
 
  
 
@@ -29,6 +31,7 @@ console.log(gameboardComputer.submarine)  */
 
 var shipsize = 5
 var alignment = "horizontal"
+let numberofShipsAdded = 0
 
 const palette = document.querySelector(('#placementBoard'))
 
@@ -197,6 +200,8 @@ function placementBoard () {
                 }});
                 //click listener for adding a ship and turning color to gray
                 k_Divs[k].addEventListener('click', () => {
+
+
                     //if the alignment is vertical, this is how the click function works
                     if (alignment === "vertical"){
                         //check if the there is already a ship in the hovered tiles, if there is, do nothing
@@ -219,8 +224,12 @@ function placementBoard () {
                             //if it is exceeding the board size, turn it backwards 
                             if (k+shipsize > 9){
                                 k_Divs[k-j].style.backgroundColor = "slategray";
+                                //calling addship function
+                                
                             }else{
                                 k_Divs[k+j].style.backgroundColor = "slategray";
+                                //calling addship function
+                                
                             }
                         }
                      }
@@ -253,14 +262,20 @@ function placementBoard () {
                             if (parseInt(k_Divs[k].id.at(-1))+shipsize > 9){
                                 let z = document.querySelector("#div_no_"+(parseInt(idNo)-j))
                                 z.style.backgroundColor = "slategray";
+                                
                             } else{
                                 let z = document.querySelector("#div_no_"+(parseInt(idNo)+j))
                                 z.style.backgroundColor = "slategray";
+                                
                             }
                         }   
                     }
+                    //no matter where the user clicked, activate the addship function with the ID number of clicked tile.
+                    //we handle how the position the ship while adding it to db within the Gameboard object.
+                    addShip (alignment, k_Divs[k].id)
 
                 });
+
 
             i_Divs[i].appendChild(k_Divs[k]); 
         }    
@@ -272,8 +287,52 @@ function placementBoard () {
 
 
 //function for adding ships to the placement board
-function addShip () {
+function addShip (alignment, placement_id) {
 
+    //placement_id is a string like div_no_36. eliminate the first 7 chars to get the number
+    let id_num = placement_id.slice(7)
+    //if the id number consists of 1 character, add a "0" in front of it
+    if (id_num.length === 1){
+        id_num = "0"+id_num
+    }
+
+
+/*     console.log(id_num[0])
+    console.log(id_num[1]) */
+    //gameboardUser.position(Ship("carrier", 5), alignment, id_num[0], id_num[1])    
+    //console.log(gameboardUser.x_axis)
+    
+
+    //add a carrier (size:5)
+    if (numberofShipsAdded ===0){
+        
+        gameboardUser.position(Ship("carrier", 5), alignment, parseInt(id_num[0]), parseInt(id_num[1]))
+        numberofShipsAdded++
+        //change the shipsize to 4 (this is for displaying the hover tiles on dom)
+        shipsize = 4
+    //add a battleship (size:4)
+    } else if (numberofShipsAdded ===1){
+        gameboardUser.position(Ship("battleship", 4), alignment, parseInt(id_num[0]), parseInt(id_num[1]))
+        numberofShipsAdded++
+        shipsize = 3
+    //add a destroyer (size:3)
+    } else if (numberofShipsAdded ===2){
+        gameboardUser.position(Ship("submarine", 3), alignment, parseInt(id_num[0]), parseInt(id_num[1]))
+        numberofShipsAdded++
+        shipsize = 3
+    //add a submarine (size:3)
+    } else if (numberofShipsAdded ===3){
+        gameboardUser.position(Ship("destroyer", 3), alignment, parseInt(id_num[0]), parseInt(id_num[1]))
+        numberofShipsAdded++
+        shipsize = 2
+    //add a boat (size:2)
+    } else if (numberofShipsAdded ===4){
+        gameboardUser.position(Ship("boat", 2), alignment, parseInt(id_num[0]), parseInt(id_num[1]))
+        
+        //start the game
+    } 
+    
+    console.log(gameboardUser.x_axis)
 
 }
 
