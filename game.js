@@ -31,7 +31,7 @@ var shipsize = 5
 var alignment = "horizontal"
 let numberofShipsAdded = 0
 var gameStarted = false
-var playersturn = true
+var gameOver = false
 
 const palette = document.querySelector(('#placementBoard'))
 const paletteContainer = document.querySelector(('#paletteContainer'))
@@ -93,6 +93,11 @@ function placementBoard () {
 
                     //if the game has started, do nothing
                     if (gameStarted === true){
+                        return
+                    }
+
+                    //if the game is over, do nothing
+                    if (gameOver === true){
                         return
                     }
 
@@ -159,6 +164,10 @@ function placementBoard () {
                     if (gameStarted === true){
                         return
                     }
+                    //if the game is over, do nothing
+                    if (gameOver === true){
+                        return
+                    }
 
                     if (alignment === "vertical"){                    
                         for (let j = 0; j < shipsize; j++) {
@@ -214,6 +223,10 @@ function placementBoard () {
 
                     //if the game has started, do nothing
                     if (gameStarted === true){
+                        return
+                    }
+                    //if the game is over, do nothing
+                    if (gameOver === true){
                         return
                     }
                     //if the alignment is vertical, this is how the click function works
@@ -491,6 +504,11 @@ function computerBoardCreation(){
                 //for each box we add a 'hover' listener
                 //how many tiles change is based on the ship size
                 k_Divs[k].addEventListener('mouseover', () => {
+
+                    //if the game is over, do nothing
+                    if (gameOver === true){
+                        return
+                    }
                     //if the tile has been hit already, do nothing
                     if(k_Divs[k].style.backgroundColor === "lightblue" || k_Divs[k].style.backgroundColor === "slategray"){
                         return 
@@ -499,6 +517,10 @@ function computerBoardCreation(){
                 })
                 //mouseout listener for cleaning the tiles once hovering is over
                 k_Divs[k].addEventListener('mouseout', () => {
+                    //if the game is over, do nothing
+                    if (gameOver === true){
+                        return
+                    }
                     //if the tile has been hit already, do nothing
                     if(k_Divs[k].style.backgroundColor === "lightblue" || k_Divs[k].style.backgroundColor === "slategray"){
                         return 
@@ -507,7 +529,10 @@ function computerBoardCreation(){
                 });
                 //click listener for adding a ship and turning color to gray
                 k_Divs[k].addEventListener('click', () => {
-
+                    //if the game is over, do nothing
+                    if (gameOver === true){
+                        return
+                    }
                     //if the tile has been hit already, do nothing
                     if(k_Divs[k].style.backgroundColor === "lightblue" || k_Divs[k].style.backgroundColor === "slategray"){
                         return 
@@ -533,8 +558,11 @@ function computerBoardCreation(){
                         k_Divs[k].style.backgroundColor = "lightblue"
                     }
 
-                    //player made a turn by clicking so turn the variable in to false
-                    //playersturn = false
+                    //check if gameover
+                    gameboardComputer.gameOver()
+                    if (gameboardComputer.gameover ===true){
+                        gameOver = true
+                    }
 
                     //computer's turn
                     computersTurn()
@@ -566,14 +594,6 @@ function startGame(){
 
 
 }
-
-/* //function to wait until player makes a turn
-function playersTurn(){
-    //hold on until player makes a turn
-    while (playersturn === true){
-
-    }
-} */
 
 
 //function for computer's turn
@@ -609,6 +629,12 @@ function computersTurn(){
     if(gameboardUser.x_axis[a][b] === "miss"){
         z.style.backgroundColor = "lightblue"
     } 
+
+    //check if gameover
+    gameboardUser.gameOver()
+    if (gameboardUser.gameover ===true){
+        gameOver = true
+    }
 
 }
 
