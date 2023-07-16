@@ -11,8 +11,6 @@ const playerComputer = Player("computer")
 //gameboardComputer.position(Ship("submarine", 3), "horizontal", 8, 9)
 
 
-
-
 /* playerUser.attack(gameboardComputer, 2, 3)
 
 console.log(gameboardComputer.x_axis[2][3])
@@ -470,7 +468,7 @@ function computerBoardCreation(){
 
         i_Divs[i] = document.createElement('div');
         //set the id of the div to the number of the div
-        i_Divs[i].setAttribute('id', `column_no_${i}`); 
+        i_Divs[i].setAttribute('id', `comp_column_no_${i}`); 
 
 
         //set style 
@@ -481,7 +479,7 @@ function computerBoardCreation(){
 
             k_Divs[k] = document.createElement('div');
             //set the id of the div to the number of the div
-            k_Divs[k].setAttribute('id', `div_no_${k*10+i}`); 
+            k_Divs[k].setAttribute('id', `comp_div_no_${k*10+i}`); 
 
             //create borders
             k_Divs[k].setAttribute('style', 'border: 1px solid black; height: 100% ; background-color: white'); 
@@ -493,19 +491,53 @@ function computerBoardCreation(){
                 //for each box we add a 'hover' listener
                 //how many tiles change is based on the ship size
                 k_Divs[k].addEventListener('mouseover', () => {
+                    //if the tile has been hit already, do nothing
+                    if(k_Divs[k].style.backgroundColor === "lightblue" || k_Divs[k].style.backgroundColor === "slategray"){
+                        return 
+                    }
                     k_Divs[k].style.backgroundColor = "blue"
                 })
                 //mouseout listener for cleaning the tiles once hovering is over
                 k_Divs[k].addEventListener('mouseout', () => {
+                    //if the tile has been hit already, do nothing
+                    if(k_Divs[k].style.backgroundColor === "lightblue" || k_Divs[k].style.backgroundColor === "slategray"){
+                        return 
+                    }
                     k_Divs[k].style.backgroundColor = "white"
                 });
                 //click listener for adding a ship and turning color to gray
                 k_Divs[k].addEventListener('click', () => {
-                    //if hit, add a X inside
-                    //if miss, blue 
-                    
+
+                    //if the tile has been hit already, do nothing
+                    if(k_Divs[k].style.backgroundColor === "lightblue" || k_Divs[k].style.backgroundColor === "slategray"){
+                        return 
+                    }
+
+                    //determine the coordinates that are hit by the player, by extracting id
+                    //k_Divs[k].id is a string like comp_div_no_36. eliminate the first 12 chars to get the number
+                    let id_num = k_Divs[k].id.slice(12)
+                    //if the id number consists of 1 character, add a "0" in front of it
+                    if (id_num.length === 1){
+                        id_num = "0"+id_num
+                    }
+                    //hit that coordinates on the gameboard object, with the hit function 
+                    gameboardComputer.receiveAttack(id_num[0], id_num[1])
+
+                    //if the position has a ship on it, it's a hit, paint it gray and add a X on it
+                    if(gameboardComputer.x_axis[id_num[0]][id_num[1]] === "hit"){
+                        k_Divs[k].style.backgroundColor = "slategray"
+                        k_Divs[k].innerText = "X"
+                    }
+                    //if the position doesn't have a ship on it, it's a miss, turn it into light blue
+                    if(gameboardComputer.x_axis[id_num[0]][id_num[1]] === "miss"){
+                        k_Divs[k].style.backgroundColor = "lightblue"
+                    }
+
                     //player made a turn by clicking so turn the variable in to false
-                    playersturn = false
+                    //playersturn = false
+
+                    //computer's turn
+                    computersTurn()
 
 
                 })
@@ -535,21 +567,48 @@ function startGame(){
 
 }
 
-//function to wait until player makes a turn
+/* //function to wait until player makes a turn
 function playersTurn(){
     //hold on until player makes a turn
     while (playersturn === true){
 
     }
-}
+} */
 
 
 //function for computer's turn
 function computersTurn(){
 
     //TODO: computer makes a move
+    //produce two random numbers from 0-9 for random hitting coordinates
+    var a = getRandomInt(10)
+    var b = getRandomInt(10)
 
-    //it's players turn to make a move
-    playersturn = true
-    playersTurn()
+    //if this tile has already been hit, call the function again for another hit because it's not a legal move
+    if (gameboardUser.x_axis[a][b] === "hit" || gameboardUser.x_axis[a][b] === "miss"){
+        return computersTurn()
+    }
+    //hit random coordinates on the gameboardUser object, with the hit function 
+    gameboardUser.receiveAttack(a, b)
+
+    //get a divno for the queryselector 
+    var divno = String(a) + String(b)
+    if (a === 0){
+        divno = String(b)
+    }
+
+    //get the tile that was hit
+    let z = document.querySelector("#div_no_"+divno)
+
+    //if it's a hit, paint it gray and add a X on it
+    if(gameboardUser.x_axis[a][b] === "hit"){
+        z.style.backgroundColor = "slategray"
+        z.innerText = "X"
+    }
+    //if the position doesn't have a ship on it, it's a miss, turn it into light blue
+    if(gameboardUser.x_axis[a][b] === "miss"){
+        z.style.backgroundColor = "lightblue"
+    } 
+
 }
+

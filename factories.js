@@ -162,7 +162,7 @@ const Gameboard = function () {
         }
         //if the received attack from the coordinates hits a ship, activate hit function on the ship
         //also remove the ship object from the tile and fill it with "hit" string
-        if(gameboard.x_axis[xAxis][yAxis] != "blanks"){
+        if(gameboard.x_axis[xAxis][yAxis] != "blank"){
             gameboard[gameboard.x_axis[xAxis][yAxis].name].hit()
             gameboard.x_axis[xAxis][yAxis] = "hit"
         }else{
