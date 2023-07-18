@@ -67,7 +67,7 @@ function computersTurn(){
     //if it's a hit, paint it gray and add a X on it
     if(gameboardUser.x_axis[a][b] === "hit"){
         //add a sound
-        var hitSound = new Audio('/sounds/hit.wav');
+        var hitSound = new Audio('./sounds/hit.wav');
         if (soundOn === true) {
         hitSound.play();
         }
@@ -83,7 +83,7 @@ function computersTurn(){
     //if the position doesn't have a ship on it, it's a miss, turn it into light blue
     if(gameboardUser.x_axis[a][b] === "miss"){
         //add a sound
-        var missSound = new Audio('/sounds/miss.wav');
+        var missSound = new Audio('./sounds/miss.wav');
         if (soundOn === true) {
         missSound.play();
         }
