@@ -64,7 +64,7 @@ function placementBoard () {
             k_Divs[k].setAttribute('id', `div_no_${k*10+i}`); 
 
             //create borders
-            k_Divs[k].setAttribute('style', 'border: 1px solid black; height: 100% ; background-color: white'); 
+            k_Divs[k].setAttribute('style', 'display: flex; justify-content: center; align-items: center; font-size: 35px; user-select: none; border: 1px solid black; height: 100% ; background-color: white'); 
 
             //set an attribute that will help us identify these divs when we select them
             k_Divs[k].setAttribute('data-src', ''); 
@@ -302,6 +302,8 @@ palette.appendChild(finalplacementBoard)
 //function for adding ships to the placement board by user click
 function addShip (alignment, placement_id) {
 
+    //change the text after each ship is added
+    let txt = document.querySelector("#placeships")
     //placement_id is a string like div_no_36. eliminate the first 7 chars to get the number
     let id_num = placement_id.slice(7)
     //if the id number consists of 1 character, add a "0" in front of it
@@ -316,21 +318,25 @@ function addShip (alignment, placement_id) {
         numberofShipsAdded++
         //change the shipsize to 4 (this is for displaying the hover tiles on dom)
         shipsize = 4
+        txt.innerText = "Place your Battleship."
     //add a battleship (size:4)
     } else if (numberofShipsAdded ===1){
         gameboardUser.position(Ship("battleship", 4), alignment, parseInt(id_num[0]), parseInt(id_num[1]))
         numberofShipsAdded++
         shipsize = 3
+        txt.innerText = "Place your Submarine."
     //add a destroyer (size:3)
     } else if (numberofShipsAdded ===2){
         gameboardUser.position(Ship("submarine", 3), alignment, parseInt(id_num[0]), parseInt(id_num[1]))
         numberofShipsAdded++
         shipsize = 3
+        txt.innerText = "Place your Destroyer."
     //add a submarine (size:3)
     } else if (numberofShipsAdded ===3){
         gameboardUser.position(Ship("destroyer", 3), alignment, parseInt(id_num[0]), parseInt(id_num[1]))
         numberofShipsAdded++
         shipsize = 2
+        txt.innerText = "Place your Patrol Boat."
     //add a boat (size:2)
     } else if (numberofShipsAdded ===4){
         gameboardUser.position(Ship("boat", 2), alignment, parseInt(id_num[0]), parseInt(id_num[1]))
@@ -346,6 +352,23 @@ function addShip (alignment, placement_id) {
 function getRandomInt(max) {
     return Math.floor(Math.random() * max);
 }
+
+//function for displaying text with an interval
+function printLetterByLetter(destination, message, speed){
+    document.getElementById(destination).innerText = ""
+    var i = 0;
+    var interval = setInterval(function(){
+        //clean the element first
+        //start adding
+        document.getElementById(destination).innerHTML += message.charAt(i);
+        i++;
+        if (i > message.length){
+            clearInterval(interval);
+        }
+    }, speed);
+}
+
+
 
 //function for placing  ships randomly inside the "gameboardComputer" object
 function addComputerShips() {
@@ -478,7 +501,7 @@ function computerBoardCreation(){
             k_Divs[k].setAttribute('id', `comp_div_no_${k*10+i}`); 
 
             //create borders
-            k_Divs[k].setAttribute('style', 'border: 1px solid black; height: 100% ; background-color: white'); 
+            k_Divs[k].setAttribute('style', 'display: flex; justify-content: center; align-items: center; font-size: 35px; user-select: none; border: 1px solid black; height: 100% ; background-color: white'); 
 
             //set an attribute that will help us identify these divs when we select them
             k_Divs[k].setAttribute('data-src', ''); 
@@ -535,10 +558,17 @@ function computerBoardCreation(){
                     if(gameboardComputer.x_axis[id_num[0]][id_num[1]] === "hit"){
                         k_Divs[k].style.backgroundColor = "slategray"
                         k_Divs[k].innerText = "X"
+                        //add a sound
+                        var hitSound = new Audio('/sounds/hit.wav');
+                        hitSound.play();
+                        //add a textchange within the function printLetterByLetter()
+                        //add an pause so game doesn't proceed until sound ends
                     }
                     //if the position doesn't have a ship on it, it's a miss, turn it into light blue
                     if(gameboardComputer.x_axis[id_num[0]][id_num[1]] === "miss"){
                         k_Divs[k].style.backgroundColor = "lightblue"
+                        var missSound = new Audio('/sounds/miss.wav');
+                        missSound.play();
                     }
 
                     //check if gameover
@@ -569,9 +599,11 @@ function computerBoardCreation(){
 function startGame(){
 
     gameStarted = true
-    //remove the alignment button
+    //remove the alignment button and "place your ships text"
+    let txt = document.querySelector("#placeships")
     let btn = document.querySelector("#alignmentBtn")
     btn.remove()
+    txt.style.visibility='hidden'
 
     //position the current board to the left, create another board of the similar kind to the right
     let computerBoard = document.createElement('div');
