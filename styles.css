@@ -25,7 +25,36 @@
 #headerContainer {
   display: flex;
   justify-content: center;
-  
+}
+
+#soundContainer{
+  display: flex;
+  justify-content: flex-end;
+}
+
+#soundContainer svg{
+  background-color: lightgray;
+  margin-right: 10rem;
+  cursor: pointer;
+}
+
+#soundContainer svg:hover #SVGRepo_iconCarrierOFF{
+  fill: white;
+}
+
+
+#soundContainer svg:hover #SVGRepo_iconCarrierON{
+  fill: white;
+}
+
+#soundContainer svg:hover{
+ 
+  margin-right: 10rem;
+  cursor: pointer;
+}
+
+#soundoffSVG{
+  display: none;
 }
 
 #paletteContainer {
