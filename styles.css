@@ -16,7 +16,10 @@
 
 #placeships{
   margin-top: 5rem;
+  margin-bottom: 2rem;
   user-select: none;
+  display: grid;
+  height: 1rem;
 }
 
 #headerContainer {

@@ -15,6 +15,7 @@ var alignment = "horizontal"
 let numberofShipsAdded = 0
 var gameStarted = false
 var gameOver = false
+var shotFired = false
 
 const palette = document.querySelector(('#placementBoard'))
 const paletteContainer = document.querySelector(('#paletteContainer'))
@@ -539,6 +540,11 @@ function computerBoardCreation(){
                     if (gameOver === true){
                         return
                     }
+
+                    //if a shot is already fired, do nothing
+                    if (shotFired === true){
+                        return
+                    }
                     //if the tile has been hit already, do nothing
                     if(k_Divs[k].style.backgroundColor === "lightblue" || k_Divs[k].style.backgroundColor === "slategray"){
                         return 
@@ -554,21 +560,42 @@ function computerBoardCreation(){
                     //hit that coordinates on the gameboard object, with the hit function 
                     gameboardComputer.receiveAttack(id_num[0], id_num[1])
 
+                    //display the text area
+                    let txt = document.querySelector("#placeships")
+                    txt.style.visibility='visible'
+
                     //if the position has a ship on it, it's a hit, paint it gray and add a X on it
                     if(gameboardComputer.x_axis[id_num[0]][id_num[1]] === "hit"){
-                        k_Divs[k].style.backgroundColor = "slategray"
-                        k_Divs[k].innerText = "X"
                         //add a sound
                         var hitSound = new Audio('/sounds/hit.wav');
                         hitSound.play();
                         //add a textchange within the function printLetterByLetter()
-                        //add an pause so game doesn't proceed until sound ends
+                        printLetterByLetter("placeships", "Player fired and... it's a hit!", 40)
+                        //add a variable to check if shot fired, don't allow user to fire another shot in the meanwhile
+                        shotFired = true
+                        setTimeout(function(){
+                            shotFired = false
+                            k_Divs[k].style.backgroundColor = "slategray"
+                            k_Divs[k].innerText = "X"
+                            //computer's turn
+                            computersTurn()
+                        }, 1400);
                     }
                     //if the position doesn't have a ship on it, it's a miss, turn it into light blue
                     if(gameboardComputer.x_axis[id_num[0]][id_num[1]] === "miss"){
-                        k_Divs[k].style.backgroundColor = "lightblue"
                         var missSound = new Audio('/sounds/miss.wav');
                         missSound.play();
+                        //add a textchange within the function printLetterByLetter()
+                        printLetterByLetter("placeships", "Player fired and... missed.", 50)
+                        //add an pause so game doesn't proceed until sound ends
+                        shotFired = true
+                        setTimeout(function(){
+                            shotFired = false
+                            k_Divs[k].style.backgroundColor = "lightblue"
+                            //computer's turn
+                            computersTurn()
+                        }, 1400);
+
                     }
 
                     //check if gameover
@@ -582,8 +609,7 @@ function computerBoardCreation(){
                         container.appendChild(text)
                     }
 
-                    //computer's turn
-                    computersTurn()
+
 
 
                 })
@@ -641,12 +667,35 @@ function computersTurn(){
 
     //if it's a hit, paint it gray and add a X on it
     if(gameboardUser.x_axis[a][b] === "hit"){
-        z.style.backgroundColor = "slategray"
-        z.innerText = "X"
+        //add a sound
+        var hitSound = new Audio('/sounds/hit.wav');
+        hitSound.play();
+        //add a textchange within the function printLetterByLetter()
+        printLetterByLetter("placeships", "Computer fired and... it's a hit!", 40)
+        //add a variable to check if shot fired, don't allow user to fire another shot in the meanwhile
+        shotFired = true
+        setTimeout(function(){
+            shotFired = false
+            z.style.backgroundColor = "slategray"
+            z.innerText = "X"
+        }, 1400);
     }
     //if the position doesn't have a ship on it, it's a miss, turn it into light blue
     if(gameboardUser.x_axis[a][b] === "miss"){
-        z.style.backgroundColor = "lightblue"
+        //add a sound
+        var missSound = new Audio('/sounds/miss.wav');
+        missSound.play();
+        //add a textchange within the function printLetterByLetter()
+        printLetterByLetter("placeships", "Computer fired and... missed.", 40)
+        //add a variable to check if shot fired, don't allow user to fire another shot in the meanwhile
+        shotFired = true
+        setTimeout(function(){
+            shotFired = false
+            z.style.backgroundColor = "lightblue"
+        }, 1400);
+
+
+
     } 
 
     //check if gameover
