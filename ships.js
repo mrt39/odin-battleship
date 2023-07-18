@@ -1,5 +1,5 @@
 import {gameboardUser, gameboardComputer} from './gameboards.js';
-import {computerBoardCreation, placementBoard}  from './gameboards.js';
+import {computerBoardCreation, placementBoard, getRandomInt}  from './gameboards.js';
 import {Gameboard, Ship, Player} from './factories.js';
 import {computersTurn, startGame} from './game.js';
 
