@@ -57,3 +57,18 @@ test('check if the gameboard registers hits through the Player objects', () => {
   expect(gameboardComputer.submarine.hits).toBe(2);
 
 }); 
+
+test('check if the gameboard registers hits through the Player objects', () => {
+
+  const gameboardComputer = Gameboard()
+  const playerUser = Player("user")
+
+  gameboardComputer.position(Ship("submarine", 3), "horizontal", 2, 3)
+
+  playerUser.attack(gameboardComputer, 2, 3)
+  expect(gameboardComputer.submarine.hits).toBe(1);
+
+  playerUser.attack(gameboardComputer, 3, 3);
+  expect(gameboardComputer.submarine.hits).toBe(2);
+
+}); 
