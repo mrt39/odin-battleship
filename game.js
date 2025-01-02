@@ -33,6 +33,7 @@ function startGame(){
 
     //position the current board to the left, create another board and place on the right
     let computerBoard = document.createElement('div');
+    computerBoard.setAttribute('id', 'computerplacementboard');
     let computerplacementBoard = computerBoardCreation()
     computerBoard.appendChild(computerplacementBoard)
     paletteContainer.appendChild(computerBoard)

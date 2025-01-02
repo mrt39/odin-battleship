@@ -360,8 +360,6 @@ function computerBoardCreation(){
     //placing the ships randomly inside the "gameboardComputer" object
     addComputerShips()
 
-    console.log(gameboardComputer.x_axis)
-
     //board creation
     let board = document.createElement('div');
     board.setAttribute('style', 'display: flex; align-items: stretch; width: 600px; height: 600px; ');
